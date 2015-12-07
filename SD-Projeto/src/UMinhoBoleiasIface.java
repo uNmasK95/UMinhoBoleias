@@ -15,6 +15,9 @@ public interface UMinhoBoleiasIface {
     public static final int SOLICITARVIAGEM =3;
     public static final int DISPONIVELVIAGEM =4;
     
+    public static final String OK = "OK";
+    public static final String KO = "KO";
+    
     public boolean registaUtilizador(String user, String pass); //pode sre throws 
     public boolean autenticar(String user, String pass);
     public String solicitarViagem(String user, Local partida, Local destino); //negativo demora x a estar disponivel, positivo em x tempo esta no local

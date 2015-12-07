@@ -1,36 +1,47 @@
+package src;
+
+import java.util.*;
+import java.io.*;
+
 /**
  * Classe Utilizador
  *
  * @author Octavio Maia
  * @version 1.0
  */
-package src;
-
-import java.util.*;
-import java.io.*;
-
-public class Utilizador {
+public class Utilizador implements Serializable {
 
     //variaveis de instancia
+    private String email;
     private String pw;
     private String nome;
+    private GregorianCalendar data_nascimento;
     private Veiculo v;
 
     public Utilizador() {
+        this.email = "";
         this.pw = "";
         this.nome = "";
-        this.v = null;
+        this.data_nascimento = new GregorianCalendar();
+        this.v=null;
     }
-
+    
+    
     public Utilizador(String email, String pw, String nome, GregorianCalendar d) {
+        this.email = email;
         this.pw = pw;
         this.nome = nome;
-        this.v = null;
+        this.data_nascimento = d;
+        this.v=null;
     }
 
     /*
      * Gets
      */
+    public String getEmail() {
+        return email;
+    }
+
     public String getPw() {
         return pw;
     }
@@ -39,10 +50,14 @@ public class Utilizador {
         return nome;
     }
 
+    public GregorianCalendar getDate() {
+        return (GregorianCalendar) data_nascimento.clone();
+    }
+
     public Veiculo getVeiculo() {
         return v;
     }
-
+    
     /*
      * Sets
      */
@@ -53,13 +68,21 @@ public class Utilizador {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    public void setData_nascimento(GregorianCalendar data_nascimento) {
+        this.data_nascimento = data_nascimento;
+    }
     
-    public void setVeiculo(Veiculo v) {
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    public void setVeiculo(Veiculo v){
         this.v = v;
     }
-
-    public boolean isCondutor() {
-        return this.v != null;
+    
+    public boolean isCondutor(){
+        return this.v!=null;
     }
 
     /*
@@ -69,6 +92,10 @@ public class Utilizador {
         StringBuilder str = new StringBuilder();
         str.append("-------Dados do utilizador------\n");
         str.append("Nome : " + this.getNome() + "\n");
+        str.append("Email : " + this.getEmail() + "\n");
+        str.append("Data de nascimento : " + this.getDate().get(Calendar.DAY_OF_MONTH) + "/"
+                + this.getDate().get(Calendar.MONTH) + "/"
+                + this.getDate().get(Calendar.YEAR) + "\n");
         return str;
     }
 
@@ -82,7 +109,8 @@ public class Utilizador {
 
         Utilizador user = (Utilizador) obj;
 
-        return (this.nome.equals(user.getNome()) && this.pw.equals(user.getPw()));
+        return (this.nome.equals(user.getNome()) && this.email.equals(user.getEmail())
+                && this.pw.equals(user.getPw())  && this.data_nascimento.equals(user.getDate()));
     }
 
 }

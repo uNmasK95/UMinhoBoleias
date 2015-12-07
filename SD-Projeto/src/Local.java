@@ -17,6 +17,12 @@ public class Local {
         this.x = x;
         this.y = y;
     }
+    
+     public Local(String s){
+        String[] spv = s.split("(,)");
+        this.x= Integer.parseInt(spv[0].replace("(", ""));
+        this.y= Integer.parseInt(spv[1].replace(")", ""));
+    }
 
     public int getX() {
         return x;
@@ -36,8 +42,10 @@ public class Local {
 
     @Override
     public String toString() {
-        return "Local{" + "x=" + x + ", y=" + y + '}';
+        return "(" + x + "," + y + ')';
     }
+   
+    
     public double distancia(Local l){
         return (Math.abs(this.getX()-l.getX()) + Math.abs(this.getY()-l.getY()));
     }
