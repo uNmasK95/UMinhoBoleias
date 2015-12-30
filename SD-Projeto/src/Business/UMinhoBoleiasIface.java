@@ -23,5 +23,5 @@ public interface UMinhoBoleiasIface {
     public String solicitarViagem(String user, Local partida, Local destino); //negativo demora x a estar disponivel, positivo em x tempo esta no local
     public String disponivelViagem(String user, Local actual, String matricula, String modelo,double custoUnitario);
     public void logout(String username);
-
+    
 }
