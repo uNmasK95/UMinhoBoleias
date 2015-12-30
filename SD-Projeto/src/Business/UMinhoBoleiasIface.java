@@ -24,4 +24,5 @@ public interface UMinhoBoleiasIface {
     public String disponivelViagem(String user, Local actual, String matricula, String modelo,double custoUnitario);
     public void logout(String username);
     
+    
 }
