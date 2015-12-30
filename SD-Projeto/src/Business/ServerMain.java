@@ -18,8 +18,8 @@ public class ServerMain {
 	private static int lerint() throws IOException{
 		Integer ret =0;
 		
-		System.out.println("Erro ao ler inetiro!!");
-		System.out.println("Diga o inteiro por favor");
+		System.out.println("Erro ao ler porto.");
+		System.out.println("Indique um porto válido: ");
 		String inp = in.nextLine();
 		try{
 			ret = Integer.parseInt(inp);
