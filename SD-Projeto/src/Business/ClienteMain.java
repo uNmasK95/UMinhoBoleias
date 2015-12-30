@@ -30,12 +30,13 @@ public class ClienteMain implements UMinhoBoleiasIface {
 	private static Scanner input = new Scanner(System.in);
 
 	public ClienteMain(String remotehost, int port) {
+
 		try {
 			sock = new Socket(remotehost, port);
 			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 			out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
 		} catch (IOException ex) {
-			Logger.getLogger(ClienteMain.class.getName()).log(Level.SEVERE, null, ex);
+			ex.printStackTrace();
 		}
 	}
 
@@ -238,7 +239,14 @@ public class ClienteMain implements UMinhoBoleiasIface {
 	}
 	
 	public static void main(String[] args) {
-		ClienteMain c1 = new ClienteMain("localhost", 6969);
+		int port;
+		try{
+			port = Integer.parseInt(args[1]);
+		}catch(Exception e){
+			System.out.println("ERRO ao Ler porta");
+			port=lerint();
+		}
+		ClienteMain c1 = new ClienteMain(args[0], 6969);
 		int n;
 		
 		System.out.println(menuInicio());
