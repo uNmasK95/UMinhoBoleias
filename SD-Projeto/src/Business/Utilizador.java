@@ -20,10 +20,11 @@ public class Utilizador {
     private Veiculo v;
     private Local loc;
     private Local dest;
-    private int custoViagem;
+    private double custoViagem;
     private Utilizador par;
     private BufferedReader in;
 	private BufferedWriter out;
+	private boolean autent;
     
     
     public Utilizador(String mail,String pw) {
@@ -39,9 +40,21 @@ public class Utilizador {
         this.par=null;
         this.in=null;
         this.out=null;
+        this.autent=false;
     }
     
     public synchronized void logout(){
+        this.condutor=false;
+        this.activ=false;
+        this.v= null;
+        this.loc = null;
+        this.dest= null;
+        this.par=null;;
+        this.ocupado=false;
+        this.autent=true;
+    }
+    
+    public synchronized void exit(){
         this.condutor=false;
         this.activ=false;
         this.v= null;
@@ -51,17 +64,21 @@ public class Utilizador {
         this.in=null;
         this.out=null;
         this.ocupado=false;
+        this.autent=false;
     }
-    
     public synchronized boolean autenticar(String pw){
     	boolean ret =false;
     	if(this.pw.equals(pw)){
-    		this.activ=true;
+    		this.autent=true;
     		ret = true;
     	}
     	return ret;
     }
 
+    public synchronized boolean isAutent(){
+    	return this.autent;
+    }
+    
 	public synchronized void setPw(String pw) {
 		this.pw = pw;
 	}
@@ -92,6 +109,7 @@ public class Utilizador {
             this.custoViagem = -1;
             this.out=out;
             this.dest=dest;
+            this.autent=true;
 
     	}
     	return ret;
@@ -156,11 +174,11 @@ public class Utilizador {
 		this.dest = dest;
 	}
 
-	public synchronized int getCustoViagem() {
+	public synchronized double getCustoViagem() {
 		return custoViagem;
 	}
 
-	public synchronized void setCustoViagem(int custoViagem) {
+	public synchronized void setCustoViagem(double custoViagem) {
 		this.custoViagem = custoViagem;
 	}
 
