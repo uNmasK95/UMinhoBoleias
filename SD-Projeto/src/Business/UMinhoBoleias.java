@@ -165,7 +165,7 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 		if(distancia==0){
 			ret =  new String(condutor.getEmail()+":"+v.getMatricula()+":"+v.getModelo());
 		}else{
-			ret =  new String(condutor.getEmail()+":"+v.getMatricula()+":"+v.getModelo()+":"+(condutor.getLoc().distancia(partida)/50));
+			ret =  new String(condutor.getEmail()+":"+v.getMatricula()+":"+v.getModelo()+":"+(condutor.getLoc().distancia(partida)/50.0));
 		}
 		return ret;
 	}
