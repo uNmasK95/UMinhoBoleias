@@ -47,7 +47,6 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 		}finally{
 			this.lockUsers.unlock();
 		}
-		
 		return ret;
     }
 
@@ -70,15 +69,15 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 
 	@Override
 	public String solicitarViagem(String mail, Local partida, Local destino) {
-		String mail_condutor;
+		String mail_condutor = "";
 		double distancia = Double.MAX_VALUE;
 		Utilizador condutor;
 		Veiculo v;
 		
 		for(Utilizador u : utilizadores.values()){
 			if(u.isCondutor() && !u.isOcupado()){
-				if(u.getLocal().distancia(partida)<distancia){
-					distancia = u.getLocal().distancia(partida);
+				if(u.getLoc().distancia(partida)<distancia){
+					distancia = u.getLoc().distancia(partida);
 					mail_condutor = u.getEmail();
 				}
 			}
@@ -90,7 +89,7 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 		if(distancia==0){
 			return new String(v.getMatricula()+":"+v.getModelo());
 		}else{
-			return new String(v.getMatricula()+":"+v.getModelo()+":"+(condutor.getLocal().distancia(partida)/50));
+			return new String(v.getMatricula()+":"+v.getModelo()+":"+(condutor.getLoc().distancia(partida)/50));
 		}
 	}
 

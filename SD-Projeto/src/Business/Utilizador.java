@@ -101,12 +101,20 @@ public class Utilizador {
 			this.getPar().setOcupado(ocupado);
 		}
 	}
+	
+	public String getEmail(){
+		return email;
+	}
 
-	public Veiculo getV() {
+	public void setEmail(String email){
+		this.email=email;
+	}
+	
+	public Veiculo getVeiculo() {
 		return v;
 	}
 
-	public void setV(Veiculo v) {
+	public void setVeiculo(Veiculo v) {
 		this.v = v;
 	}
 
