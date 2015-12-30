@@ -58,7 +58,6 @@ public class ServerConnection implements Runnable{
     private void login() throws IOException{
 		String info = in.readLine();
 		String[] arr = info.split(":");
-		
 		if(umb.autenticar(arr[0], arr[1])){ 
 			//autenticou
 			login = umb.getUser(arr[0]);	
@@ -181,34 +180,41 @@ public class ServerConnection implements Runnable{
 	}
 	
 	private void logout(){
-		this.umb.logout(login.getEmail());
+		if(this.login!=null){
+			this.umb.logout(login.getEmail());
+		}
 	}
     public void run() {
-    	String op;
+    	String op="a";
     	try{
-    		while(sock.isConnected()){
+    		while(sock.isConnected() && op !=null){
+    			System.out.println("Espera de Ler");
     			op = in.readLine();
-    			switch(op){
-    				case REGISTAUTILIZADOR:
-    					regista();
-    					break;
-    				case AUTENTICAR:
-    					login();
-    					break;
-    				case SOLICITARVIAGEM:
-    					solicita();
-    					break;
-    				case DISPONIVELVIAGEM:
-    					disponivel();
-    					break;
-    				case LOGOUT:
-    					logout();
-    					break;
+    			if(op!=null){
+    				switch(op){
+    					case REGISTAUTILIZADOR:
+    						regista();
+    						break;
+    					case AUTENTICAR:
+    						login();
+    						break;
+    					case SOLICITARVIAGEM:
+    						solicita();
+    						break;
+    					case DISPONIVELVIAGEM:
+    						disponivel();
+    						break;
+    					case LOGOUT:
+    						logout();
+    						break;
+    				}
     			}
     		}
+    		//System.out.println("SAI");
     	}catch(IOException ex){
     		
     	}
+    	System.out.println("SAI");
     }
     
 }

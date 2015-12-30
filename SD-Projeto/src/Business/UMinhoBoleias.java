@@ -52,6 +52,7 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 
 	@Override
 	public boolean autenticar(String mail, String pass) {
+		out.println("Autenticar");
 		boolean ret = false;
 		try{
 			this.lockUsers.lock();
@@ -101,6 +102,9 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 		out.println("A ver se existem condutoes dusponiveis");
 		while(ret==false && ui.hasNext()){
 			 u = ui.next();
+			 out.println("Ativo: " + u.isActiv());
+			 out.println("Condutor: " + u.isCondutor());
+			 out.println("ocupado: " + u.isOcupado());
 			if(u.isActiv() && u.isCondutor() && !u.isOcupado()){
 				ret = true;
 				out.println("encotrei condutor disponivel");
