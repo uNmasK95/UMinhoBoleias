@@ -20,7 +20,7 @@ public class Utilizador {
     private Veiculo v;
     private Local loc;
     private Local dest;
-    private int custoViagem;
+    private double custoViagem;
     private Utilizador par;
     private BufferedReader in;
 	private BufferedWriter out;
@@ -156,11 +156,11 @@ public class Utilizador {
 		this.dest = dest;
 	}
 
-	public synchronized int getCustoViagem() {
+	public synchronized double getCustoViagem() {
 		return custoViagem;
 	}
 
-	public synchronized void setCustoViagem(int custoViagem) {
+	public synchronized void setCustoViagem(double custoViagem) {
 		this.custoViagem = custoViagem;
 	}
 
