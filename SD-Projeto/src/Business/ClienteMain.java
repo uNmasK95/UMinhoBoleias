@@ -31,7 +31,6 @@ public class ClienteMain implements UMinhoBoleiasIface {
 	private static Scanner input = new Scanner(System.in);
 
 	public ClienteMain(String remotehost, int port) {
-
 		try {
 			sock = new Socket(remotehost, port);
 			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
@@ -290,7 +289,8 @@ public class ClienteMain implements UMinhoBoleiasIface {
 			default:
 				System.out.println("Insira um numero do menu");
 			}
-			if (c1.email != null) {
+			
+			while(c1.email != null) {
 				if (c1.condutor) {
 					System.out.println(menuCondutor());
 					if ((n = lerint()) == 1) {
