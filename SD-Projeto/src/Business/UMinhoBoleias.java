@@ -9,6 +9,7 @@ import static java.lang.System.out;
 
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -67,36 +68,142 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 		return ret;
 	}
 
-	@Override
-	public String solicitarViagem(String mail, Local partida, Local destino) {
-		String mail_condutor = "";
-		double distancia = Double.MAX_VALUE;
-		Utilizador condutor;
-		Veiculo v;
-		
-		for(Utilizador u : utilizadores.values()){
-			if(u.isCondutor() && !u.isOcupado()){
-				if(u.getLoc().distancia(partida)<distancia){
-					distancia = u.getLoc().distancia(partida);
-					mail_condutor = u.getEmail();
-				}
+	public Utilizador getUser(String email){
+		Utilizador ret = null;
+		try{
+			this.lockUsers.lock();
+			ret = this.utilizadores.get(email);
+			
+		}finally{
+			this.lockUsers.unlock();
+		}
+		return ret;
+	}
+	
+	private boolean existPassEspera(){
+		boolean ret = false;
+		Utilizador u = null;
+		Iterator<Utilizador> ui  = utilizadores.values().iterator();
+		while(ret==false && ui.hasNext()){
+			 u = ui.next();
+			if(u.isActiv() && !u.isCondutor() && !u.isOcupado()){
+				ret = true;
 			}
 		}
+		return ret;
+	}
+	
+	private boolean existCondDisp(){
+		boolean ret = false;
+		Utilizador u = null;
+		Iterator<Utilizador> ui  = utilizadores.values().iterator();
+		while(ret==false && ui.hasNext()){
+			 u = ui.next();
+			if(u.isActiv() && u.isCondutor() && !u.isOcupado()){
+				ret = true;
+			}
+		}
+		return ret;
+	}
+	
+	
+	@Override
+	public String solicitarViagem(String mail, Local partida, Local destino) {
+		String ret = null;
+		double distancia = Double.MAX_VALUE;
+		Utilizador condutor=null;
+		Veiculo v;
+		Utilizador log =null;
 		
-		condutor = utilizadores.get(mail_condutor);
+		try{
+			this.lockUsers.lock();
+			log=utilizadores.get(mail);
+			while(!this.existCondDisp()){
+				try {
+					this.esperaCond.await();
+				} catch (InterruptedException e) {
+					System.out.println("Estrorei no await");
+					e.printStackTrace();
+				}
+			}
+			//ja tenho condutor
+			for(Utilizador u : utilizadores.values()){
+				if(u.isCondutor() && !u.isOcupado()){
+					if(u.getLoc().distancia(partida)<distancia){
+						distancia = u.getLoc().distancia(partida);
+						condutor = u;
+					}
+				}
+			}
+			//ja estao coupados
+			condutor.setOcupado(true);
+			log.setOcupado(true);
+			//acossiar
+			log.setPar(condutor);
+			condutor.setPar(log);
+			//estao acosiados
+			
+		}finally{
+			this.lockUsers.unlock();
+		}
+		
 		v = condutor.getVeiculo();
 		
 		if(distancia==0){
-			return new String(v.getMatricula()+":"+v.getModelo());
+			ret =  new String(condutor.getEmail()+":"+v.getMatricula()+":"+v.getModelo());
 		}else{
-			return new String(v.getMatricula()+":"+v.getModelo()+":"+(condutor.getLoc().distancia(partida)/50));
+			ret =  new String(condutor.getEmail()+":"+v.getMatricula()+":"+v.getModelo()+":"+(condutor.getLoc().distancia(partida)/50));
 		}
+		return ret;
 	}
 
 	@Override
 	public String disponivelViagem(String mail, Local actual, String matricula, String modelo, double custoUnitario) {
+		String ret = null;
+		Utilizador pass=null;
+		Veiculo v;
+		Utilizador log =null;
 		
-		return null;
+		try{
+			this.lockUsers.lock();
+			log=utilizadores.get(mail);
+			while(!this.existCondDisp()){
+				try {
+					this.esperaCond.await();
+				} catch (InterruptedException e) {
+					System.out.println("Estrorei no await");
+					e.printStackTrace();
+				}
+			}
+			//ja tenho condutor
+			for(Utilizador u : utilizadores.values()){
+				if(u.isCondutor() && !u.isOcupado()){
+					if(u.getLoc().distancia(partida)<distancia){
+						distancia = u.getLoc().distancia(partida);
+						condutor = u;
+					}
+				}
+			}
+			//ja estao coupados
+			condutor.setOcupado(true);
+			log.setOcupado(true);
+			//acossiar
+			log.setPar(condutor);
+			condutor.setPar(log);
+			//estao acosiados
+			
+		}finally{
+			this.lockUsers.unlock();
+		}
+		
+		v = condutor.getVeiculo();
+		
+		if(distancia==0){
+			ret =  new String(condutor.getEmail()+":"+v.getMatricula()+":"+v.getModelo());
+		}else{
+			ret =  new String(condutor.getEmail()+":"+v.getMatricula()+":"+v.getModelo()+":"+(condutor.getLoc().distancia(partida)/50));
+		}
+		return ret;
 	}
     
 }
