@@ -47,6 +47,7 @@ public class Local {
    
     
     public int distancia(Local l){
+    	System.out.println("Distancia " + (Math.abs(this.getX()-l.getX()) + Math.abs(this.getY()-l.getY())));
         return (Math.abs(this.getX()-l.getX()) + Math.abs(this.getY()-l.getY()));
     }
     
