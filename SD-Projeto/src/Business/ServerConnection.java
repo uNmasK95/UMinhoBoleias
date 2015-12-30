@@ -22,7 +22,7 @@ public class ServerConnection implements Runnable{
     static final String AUTENTICAR = "2";
     static final String SOLICITARVIAGEM ="3";
     static final String DISPONIVELVIAGEM ="4";
-	
+	static int sleepFactor = 1000;
     private Socket sock;
     private UMinhoBoleias umb;
     private BufferedWriter out;
@@ -101,7 +101,7 @@ public class ServerConnection implements Runnable{
 		
 		//sleep * 60 * 1000 (min * milisegundos)
 		try {
-			Thread.sleep(sleep*60000);										
+			Thread.sleep(sleep*sleepFactor);										
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -121,13 +121,13 @@ public class ServerConnection implements Runnable{
 		int sleepViagem = partida.distancia(destino);
 		
 		try{
-			Thread.sleep(sleepViagem*60000);
+			Thread.sleep(sleepViagem*sleepFactor);
 		}catch(InterruptedException e){
 			e.printStackTrace();
 		}
 		
 		//envia o custo da viagem ao cliente
-		out.write(String.valueOf(login.getPar().getCustoViagem()));
+		out.write(String.valueOf((login.getPar().getCustoUnitario()*partida.distancia(destino));
 		out.newLine();
 		out.flush();
 		
