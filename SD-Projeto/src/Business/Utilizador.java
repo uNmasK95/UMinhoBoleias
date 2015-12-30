@@ -20,7 +20,7 @@ public class Utilizador {
     private Veiculo v;
     private Local loc;
     private Local dest;
-    private double custoViagem;
+    private int custoUnitario;
     private Utilizador par;
     private BufferedReader in;
 	private BufferedWriter out;
@@ -36,7 +36,7 @@ public class Utilizador {
         this.v= null;
         this.loc = null;
         this.dest= null;
-        this.custoViagem = -1;
+        this.custoUnitario = -1;
         this.par=null;
         this.in=null;
         this.out=null;
@@ -106,7 +106,7 @@ public class Utilizador {
             this.loc =l;
             this.par=null;
             this.in=in;
-            this.custoViagem = -1;
+            this.custoUnitario = -1;
             this.out=out;
             this.dest=dest;
             this.autent=true;
@@ -174,12 +174,12 @@ public class Utilizador {
 		this.dest = dest;
 	}
 
-	public synchronized double getCustoViagem() {
-		return custoViagem;
+	public synchronized int getCustoUnitario() {
+		return custoUnitario;
 	}
 
-	public synchronized void setCustoViagem(double custoViagem) {
-		this.custoViagem = custoViagem;
+	public synchronized void setCustoUnitario(int custoUnitario) {
+		this.custoUnitario = custoUnitario;
 	}
 
 	public synchronized Utilizador getPar() {
