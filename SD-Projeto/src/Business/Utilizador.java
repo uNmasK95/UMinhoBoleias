@@ -52,7 +52,12 @@ public class Utilizador {
     }
     
     public boolean autenticar(String pw){
-    	return this.pw.equals(pw);
+    	boolean ret =false;
+    	if(this.pw.equals(pw)){
+    		this.activ=true;
+    		ret = true;
+    	}
+    	return ret;
     }
     
     public boolean login(String pw, boolean condutor, Veiculo v,Local l, BufferedReader in,
@@ -134,7 +139,10 @@ public class Utilizador {
 	}
 
 	public void setPar(Utilizador par) {
-		this.par = par;
+		if(this.par==null){
+			this.par = par;
+			par.setPar(this);
+		}
 	}
 
 	public BufferedReader getIn() {
@@ -153,6 +161,10 @@ public class Utilizador {
 		this.out = out;
 	}
     
+	@Override
+	public int hashCode() {
+		return this.email.hashCode();
+	}
     
 
 }
