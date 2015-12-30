@@ -10,17 +10,19 @@ package Business;
  * @author joaosilva
  */
 public interface UMinhoBoleiasIface {
-    public static final int REGISTAUTILIZADOR =1;
-    public static final int AUTENTICAR =2;
-    public static final int SOLICITARVIAGEM =3;
-    public static final int DISPONIVELVIAGEM =4;
-    
+    public static final String REGISTAUTILIZADOR = "REGISTAUTILIZADOR";
+    public static final String AUTENTICAR = "AUTENTICAR";
+    public static final String SOLICITARVIAGEM = "SOLICITARVIAGEM";
+    public static final String DISPONIVELVIAGEM ="DISPONIVELVIAGEM";
+
     public static final String OK = "OK";
     public static final String KO = "KO";
-    
-    public boolean registaUtilizador(String user, String pass); //pode sre throws 
+
+    public boolean registaUtilizador(String user, String pass); //pode sre throws
     public boolean autenticar(String user, String pass);
     public String solicitarViagem(String user, Local partida, Local destino); //negativo demora x a estar disponivel, positivo em x tempo esta no local
-    public String disponivelViagem(String user, Local actual, String matricula, String modelo,double custoUnitario);  
+    public String disponivelViagem(String user, Local actual, String matricula, String modelo,double custoUnitario);
+    public void logout(String username);
+    
     
 }
