@@ -239,6 +239,9 @@ public class ServerConnection implements Runnable{
     	if(!lout){
     		logout();
     	}
+    	if(!lout){
+    		logout();
+    	}
     	System.out.println("SAI");
     }
     
