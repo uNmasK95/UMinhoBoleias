@@ -20,6 +20,7 @@ public class Utilizador {
     private Veiculo v;
     private Local loc;
     private Local dest;
+    private int custoViagem;
     private Utilizador par;
     private BufferedReader in;
 	private BufferedWriter out;
@@ -34,12 +35,13 @@ public class Utilizador {
         this.v= null;
         this.loc = null;
         this.dest= null;
+        this.custoViagem = -1;
         this.par=null;
         this.in=null;
         this.out=null;
     }
     
-    public void logout(){
+    public synchronized void logout(){
         this.condutor=false;
         this.activ=false;
         this.v= null;
@@ -51,7 +53,7 @@ public class Utilizador {
         this.ocupado=false;
     }
     
-    public boolean autenticar(String pw){
+    public synchronized boolean autenticar(String pw){
     	boolean ret =false;
     	if(this.pw.equals(pw)){
     		this.activ=true;
@@ -59,28 +61,24 @@ public class Utilizador {
     	}
     	return ret;
     }
-    
-    public String getPw() {
-		return pw;
-	}
 
-	public void setPw(String pw) {
+	public synchronized void setPw(String pw) {
 		this.pw = pw;
 	}
 
-	public Veiculo getV() {
+	public synchronized Veiculo getV() {
 		return v;
 	}
 
-	public void setV(Veiculo v) {
+	public synchronized void setV(Veiculo v) {
 		this.v = v;
 	}
 
-	public void setCondutor(boolean condutor) {
+	public synchronized void setCondutor(boolean condutor) {
 		this.condutor = condutor;
 	}
 
-    public boolean login(String pw, boolean condutor, Veiculo v,Local l, BufferedReader in, BufferedWriter out,Local dest){
+    public synchronized boolean login(String pw, boolean condutor, Veiculo v,Local l, BufferedReader in, BufferedWriter out,Local dest){
     	boolean ret = false;
     	if(this.pw.equals(pw)){
     		ret = true;
@@ -91,6 +89,7 @@ public class Utilizador {
             this.loc =l;
             this.par=null;
             this.in=in;
+            this.custoViagem = -1;
             this.out=out;
             this.dest=dest;
 
@@ -98,96 +97,102 @@ public class Utilizador {
     	return ret;
     }
     
-    public String getPw(){
+    public synchronized String getPw(){
     	return pw;
     }
 
-	public boolean isCondutor() {
+	public synchronized boolean isCondutor() {
 		return condutor;
 	}
 
-	public boolean isActiv() {
+	public synchronized boolean isActiv() {
 		return activ;
 	}
 
-	public void setActiv(boolean activ) {
+	public synchronized void setActiv(boolean activ) {
 		this.activ = activ;
 	}
 
-	public boolean isOcupado() {
+	public synchronized boolean isOcupado() {
 		return ocupado;
 	}
 
-	public void setOcupado(boolean ocupado) {
+	public synchronized void setOcupado(boolean ocupado) {
 		if(this.ocupado==false){
 			this.ocupado = ocupado;
 			this.getPar().setOcupado(ocupado);
 		}
 	}
 	
-	public String getEmail(){
+	public synchronized String getEmail(){
 		return email;
 	}
 
-	public void setEmail(String email){
+	public synchronized void setEmail(String email){
 		this.email=email;
 	}
 	
-	public Veiculo getVeiculo() {
+	public synchronized Veiculo getVeiculo() {
 		return v;
 	}
 
-	public void setVeiculo(Veiculo v) {
+	public synchronized void setVeiculo(Veiculo v) {
 		this.v = v;
 	}
 
-	public Local getLoc() {
+	public synchronized Local getLoc() {
 		return loc;
 	}
 
-	public void setLoc(Local loc) {
+	public synchronized void setLoc(Local loc) {
 		this.loc = loc;
 	}
 
-	public Local getDest() {
+	public synchronized Local getDest() {
 		return dest;
 	}
 
-	public void setDest(Local dest) {
+	public synchronized void setDest(Local dest) {
 		this.dest = dest;
 	}
 
-	public Utilizador getPar() {
-		return par;
+	public synchronized int getCustoViagem() {
+		return custoViagem;
 	}
 
-	public void setPar(Utilizador par) {
+	public synchronized void setCustoViagem(int custoViagem) {
+		this.custoViagem = custoViagem;
+	}
+
+	public synchronized Utilizador getPar() {
+		return par;
+	}
+ 
+	public synchronized void setPar(Utilizador par) {
 		if(this.par==null){
 			this.par = par;
 			par.setPar(this);
 		}
 	}
 
-	public BufferedReader getIn() {
+	public synchronized BufferedReader getIn() {
 		return in;
 	}
 
-	public void setIn(BufferedReader in) {
+	public synchronized void setIn(BufferedReader in) {
 		this.in = in;
 	}
 
-	public BufferedWriter getOut() {
+	public synchronized BufferedWriter getOut() {
 		return out;
 	}
 
-	public void setOut(BufferedWriter out) {
+	public synchronized void setOut(BufferedWriter out) {
 		this.out = out;
 	}
     
 	@Override
-	public int hashCode() {
+	public synchronized int hashCode() {
 		return this.email.hashCode();
 	}
-    
-
 }
