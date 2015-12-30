@@ -155,15 +155,13 @@ public class ClienteMain implements UMinhoBoleiasIface {
 
 			if (arr.length == 3) {
 				// tem uma viagem para comprir apartir do local de onte está
-				System.out.println("O Utilizador " + arr[0] + " encontra-se  no loca em que se encontra " + arr[1]
+				System.out.println("O Utilizador " + arr[0] + " encontra-se  no local em que se encontra " + arr[1]
 						+ " a espera de boleia para o destino " + arr[2]);
 			} else {
 				// o condutor nao se encontra no local de partida
-				System.out.println("O Utilizador " + arr[0] + " encontra-se  no loca " + arr[1]
+				System.out.println("O Utilizador " + arr[0] + " encontra-se  no local " + arr[1]
 						+ " a espera de boleia para o destino " + arr[2]);
 			}
-
-			linhaResposta = in.readLine();
 
 			// apos o serverconnection ter feito sleep do tempo de deslocacao do
 			// condutor ate ao local de partida
