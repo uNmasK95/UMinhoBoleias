@@ -179,7 +179,9 @@ public class ClienteMain implements UMinhoBoleiasIface {
 			// apos o serverconnection ter fetio o sleep do tempo de viagem
 			// tem de receber o custo
 			linhaResposta = in.readLine();
-			System.out.println("Chegou ao destino");
+			if(linhaResposta.equals(OK)){
+				System.out.println("Chegou ao destino");
+			}
 		} catch (IOException ex) {
 			return "Viagem nao realizada";
 		}
