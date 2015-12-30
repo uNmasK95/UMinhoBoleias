@@ -26,7 +26,7 @@ public class ClienteMain implements UMinhoBoleiasIface {
 	private Socket sock;
 	private BufferedWriter out;
 	private BufferedReader in;
-	private static int sleepFactor = 1000;
+	private static int sleepFactor = 10;
 
 	private static Scanner input = new Scanner(System.in);
 
@@ -116,6 +116,8 @@ public class ClienteMain implements UMinhoBoleiasIface {
 				System.out.println("O Utilizador " + arr[0] + " com o carro de matricula " + arr[1] + " e modelo "
 						+ arr[2] + " irá demorar " + (Double.parseDouble(arr[3]) * sleepFactor) + " segundos a apresentar-se no local de partida");
 			}
+			
+			linhaResposta = in.readLine();
 
 			// apos o serverconnection ter feito sleep do tempo de deslocacao do
 			// condutor ate ao local de partida
@@ -163,6 +165,8 @@ public class ClienteMain implements UMinhoBoleiasIface {
 						+ " a espera de boleia para o destino " + arr[2]);
 			}
 
+			linhaResposta = in.readLine();
+			
 			// apos o serverconnection ter feito sleep do tempo de deslocacao do
 			// condutor ate ao local de partida
 			if (linhaResposta.equals(OK)) {
