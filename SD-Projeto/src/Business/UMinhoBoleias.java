@@ -10,6 +10,8 @@ import static java.lang.System.out;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  *
@@ -17,29 +19,53 @@ import java.util.Map;
  */
 public class UMinhoBoleias implements UMinhoBoleiasIface {
 
-	private Map<String, Utilizador> utilizadores = new HashMap<String, Utilizador>();
+	private Map<String, Utilizador> utilizadores;
+	ReentrantLock lockUsers;
+	Condition esperaPass;
+	Condition esperaCond;
     
+	
+	public UMinhoBoleias(){
+		this.utilizadores = new HashMap<>();
+		this.lockUsers = new ReentrantLock();
+		this.esperaPass = this.lockUsers.newCondition();
+		this.esperaCond = this.lockUsers.newCondition();
+	}
+	
 	@Override
 	public boolean registaUtilizador(String mail, String pass) {
-		if(!utilizadores.containsKey(mail)){
-			utilizadores.put(mail, new Utilizador(mail, pass));
-	        out.println("Registado com sucesso!\n");
-	        return true;
-		}else{
-			out.println("Já existe um utilizador com esse nome");
-			return false;
+		boolean ret = false;
+		try{
+			this.lockUsers.lock();
+			if(!utilizadores.containsKey(mail)){
+				utilizadores.put(mail, new Utilizador(mail, pass));
+		        out.println("Registado com sucesso!\n");
+		        ret= true;
+			}else{
+				out.println("Já existe um utilizador com esse nome");
+			}
+		}finally{
+			this.lockUsers.unlock();
 		}
-		return false;
+		
+		return ret;
     }
 
 	@Override
 	public boolean autenticar(String mail, String pass) {
-		if(!utilizadores.containsKey(mail)){
-			return false;
-		}else if(utilizadores.get(mail).getPw().equals(pass)){
-			return true;
+		boolean ret = false;
+		try{
+			this.lockUsers.lock();
+			if(utilizadores.containsKey(mail)){
+				Utilizador u = utilizadores.get(mail);
+				if(!u.isActiv() && u.autenticar(pass)){
+					ret = true;
+				}
+			}
+		}finally{
+			this.lockUsers.unlock();
 		}
-		return false;
+		return ret;
 	}
 
 	@Override
