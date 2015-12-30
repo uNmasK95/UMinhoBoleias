@@ -1,50 +1,31 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Business;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import testesJMS.Boleias;
-import testesJMS.ServerConnection;
-
-/**
- *
- * @author ruifreitas
- */
 public class Servidor {
     
-	private ServerSocket sSock;
+	private ServerSocket servidor;
 	private int port;
 	private UMinhoBoleias boleias;
 	
 	public Servidor(int port) throws IOException {
 		this.port = port;
 		this.boleias = new UMinhoBoleias();
-		this.sSock = new ServerSocket(port);
+		this.servidor = new ServerSocket(port);
 	}
 	
 	public void startServer(){
 		while(true){
-            Socket sock = null;
+            Socket cliente = null;
             try {
-                sock = sSock.accept();
+                cliente = servidor.accept();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-            Thread t;
-			try {
-				t = new Thread(new ServerConnection(sock,bol));
-				t.start();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-            
+            Thread t = new Thread(new ServerConnection(cliente,boleias));
+			t.start();            
         }
 	}
 }
