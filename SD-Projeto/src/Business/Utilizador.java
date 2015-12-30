@@ -60,7 +60,27 @@ public class Utilizador {
     	return ret;
     }
     
-    public boolean login(String pw, boolean condutor, Veiculo v,Local l, BufferedReader in,
+    public String getPw() {
+		return pw;
+	}
+
+	public void setPw(String pw) {
+		this.pw = pw;
+	}
+
+	public Veiculo getV() {
+		return v;
+	}
+
+	public void setV(Veiculo v) {
+		this.v = v;
+	}
+
+	public void setCondutor(boolean condutor) {
+		this.condutor = condutor;
+	}
+
+	public boolean login(String pw, boolean condutor, Veiculo v,Local l, BufferedReader in,
 	BufferedWriter out,Local dest){
     	boolean ret = false;
     	if(this.pw.equals(pw)){
