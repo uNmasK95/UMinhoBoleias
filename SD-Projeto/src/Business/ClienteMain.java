@@ -46,32 +46,6 @@ public class ClienteMain implements UMinhoBoleiasIface {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	private static String menuInicio() {
-		StringBuilder ap = new StringBuilder();
-		ap.append("=========Menu=========");
-		ap.append("0-Sair");
-		ap.append("1-Registar utilizador");
-		ap.append("2-Login Utilizador");
-		return ap.toString();
-	}
-	
-	private static String menuCondutor(){
-		StringBuilder ap = new StringBuilder();
-		ap.append("=========Menu Condutor=========");
-		ap.append("1-Disponibilizar boleia");
-		ap.append("Outro-Fazer logout");
-		return ap.toString();
-	}
-	
-	private static String menuCliente(){
-		StringBuilder ap = new StringBuilder();
-		ap.append("=========Menu Cliente=========");
-		ap.append("1-Disponibilizar boleia");
-		ap.append("Outro-Fazer logout");
-		return ap.toString();
-	}
-
 	@Override
 	public boolean registaUtilizador(String user, String pass) {
 		String l;
@@ -207,20 +181,68 @@ public class ClienteMain implements UMinhoBoleiasIface {
 		return "Viagem realizada com sucesso";			
 	}
 
-	private static Local lerLocal() {
-		System.out.print("X-");
-		int x = input.nextInt();
-		System.out.print("Y-");
-		int y = input.nextInt();
-		return new Local(x, y);
+	@Override
+	public void logout(String username) {
+		try {
+			out.write(LOGOUT);
+			out.newLine();
+			out.flush();
+		} catch (IOException e) {
+			System.out.println("ERRO fazer logout");
+			e.printStackTrace();
+		}	
 	}
 
+	private static String menuInicio() {
+		StringBuilder ap = new StringBuilder();
+		ap.append("=========Menu=========");
+		ap.append("0-Sair");
+		ap.append("1-Registar utilizador");
+		ap.append("2-Login Utilizador");
+		return ap.toString();
+	}
+	
+	private static String menuCondutor(){
+		StringBuilder ap = new StringBuilder();
+		ap.append("=========Menu Condutor=========");
+		ap.append("1-Disponibilizar boleia");
+		ap.append("Outro-Fazer logout");
+		return ap.toString();
+	}
+	
+	private static String menuCliente(){
+		StringBuilder ap = new StringBuilder();
+		ap.append("=========Menu Cliente=========");
+		ap.append("1-Disponibilizar boleia");
+		ap.append("Outro-Fazer logout");
+		return ap.toString();
+	}
+
+	private static Local lerLocal() {
+		System.out.print("X-");
+		int x = lerint();
+		System.out.print("Y-");
+		int y = lerint();
+		return new Local(x, y);
+	}
+	
+	private static int lerint() {
+		Integer ret =0;
+		String inp = input.nextLine();
+		try{
+			ret = Integer.parseInt(inp);
+		}catch(Exception e){
+			ret = lerint();			
+		}
+		return ret;
+	}
+	
 	public static void main(String[] args) {
 		ClienteMain c1 = new ClienteMain("localhost", 6969);
 		int n;
 		
 		System.out.println(menuInicio());
-		while ((n = input.nextInt()) != 0 && (c1.email)==null) {
+		while ((n = lerint()) != 0 && (c1.email)==null) {
 			System.out.println(menuInicio());
 			switch (n) {
 				case 1: {
@@ -240,7 +262,7 @@ public class ClienteMain implements UMinhoBoleiasIface {
 					String pass = input.nextLine();
 					c1.autenticar(email, pass);
 					System.out.println("1-Condutor outro-Cliente");
-					if((n = input.nextInt())==1){
+					if((n = lerint())==1){
 						c1.condutor = true;
 					}else{
 						c1.condutor = false;
@@ -252,7 +274,7 @@ public class ClienteMain implements UMinhoBoleiasIface {
 			}
 			if(c1.condutor){
 				System.out.println(menuCondutor());
-				if((n = input.nextInt()) == 1) {
+				if((n = lerint()) == 1) {
 					System.out.println("=========Disponibilizar Viagem=========");
 					if (c1.getEmail() != null) {
 						System.out.println("Local de Atual");
@@ -268,12 +290,12 @@ public class ClienteMain implements UMinhoBoleiasIface {
 						System.out.println("Necessita de estar autenticado");
 					}
 				}else{			
-						//fazer logout
+					c1.logout(null);
 				}
 			}else{
 				//menu do cliente
 				System.out.println(menuCliente());
-				if((n = input.nextInt()) == 1) {
+				if((n = lerint()) == 1) {
 					System.out.println("=========Solicitar Viagem=========");
 					if (c1.getEmail() != null) {
 						System.out.println("Local de Partida");
@@ -285,7 +307,7 @@ public class ClienteMain implements UMinhoBoleiasIface {
 						System.out.println("Necessita de estar autenticado");
 					}
 				}else{
-					//fazer logout
+					c1.logout(null);
 				}
 			}
 		}
