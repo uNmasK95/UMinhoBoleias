@@ -18,10 +18,11 @@ import java.net.Socket;
  */
 public class ServerConnection implements Runnable{
     
-	static final String REGISTAUTILIZADOR ="1";
-    static final String AUTENTICAR = "2";
-    static final String SOLICITARVIAGEM ="3";
-    static final String DISPONIVELVIAGEM ="4";
+	static final String REGISTAUTILIZADOR ="REGISTAUTILIZADOR";
+    static final String AUTENTICAR = "AUTENTICAR";
+    static final String SOLICITARVIAGEM ="SOLICITARVIAGEM";
+    static final String DISPONIVELVIAGEM ="DISPONIVELVIAGEM";
+    static final String LOGOUT ="LOGOUT";
 	static int sleepFactor = 1000;
     private Socket sock;
     private UMinhoBoleias umb;
@@ -130,7 +131,7 @@ public class ServerConnection implements Runnable{
 		out.write(String.valueOf((login.getPar().getCustoUnitario()*partida.distancia(destino));
 		out.newLine();
 		out.flush();
-		
+		login.logout();
 		//envia que chegou ao destino ao condutor
 		/*condutor.getOut().write("OK"); 
 		condutor.getOut().newLine();
@@ -175,10 +176,13 @@ public class ServerConnection implements Runnable{
 		out.write("OK");
 		out.newLine();
 		out.flush();
-		
+		login.logout();
 		
 	}
 	
+	private void logout(){
+		this.umb.logout(login.getEmail());
+	}
     public void run() {
     	String op;
     	try{
@@ -196,6 +200,9 @@ public class ServerConnection implements Runnable{
     					break;
     				case DISPONIVELVIAGEM:
     					disponivel();
+    					break;
+    				case LOGOUT:
+    					logout();
     					break;
     			}
     		}
