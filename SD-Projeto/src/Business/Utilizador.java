@@ -24,6 +24,7 @@ public class Utilizador {
     private Utilizador par;
     private BufferedReader in;
 	private BufferedWriter out;
+	private boolean autent;
     
     
     public Utilizador(String mail,String pw) {
@@ -39,6 +40,7 @@ public class Utilizador {
         this.par=null;
         this.in=null;
         this.out=null;
+        this.autent=false;
     }
     
     public synchronized void logout(){
@@ -51,17 +53,22 @@ public class Utilizador {
         this.in=null;
         this.out=null;
         this.ocupado=false;
+        this.autent=false;
     }
     
     public synchronized boolean autenticar(String pw){
     	boolean ret =false;
     	if(this.pw.equals(pw)){
-    		//this.activ=true;
+    		this.autent=true;
     		ret = true;
     	}
     	return ret;
     }
 
+    public synchronized boolean isAutent(){
+    	return this.autent;
+    }
+    
 	public synchronized void setPw(String pw) {
 		this.pw = pw;
 	}
@@ -92,6 +99,7 @@ public class Utilizador {
             this.custoViagem = -1;
             this.out=out;
             this.dest=dest;
+            this.autent=true;
 
     	}
     	return ret;

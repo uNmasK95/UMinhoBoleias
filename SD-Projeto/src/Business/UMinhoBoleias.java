@@ -58,7 +58,7 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 			if(utilizadores.containsKey(mail)){
 				out.println("O ultizador existe");
 				Utilizador u = utilizadores.get(mail);
-				if(!u.isActiv() && u.autenticar(pass)){
+				if(!u.isAutent() && u.autenticar(pass)){
 					out.println("O ultizador autenticado");
 					ret = true;
 				}
