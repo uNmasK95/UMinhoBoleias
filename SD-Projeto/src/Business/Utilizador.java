@@ -56,7 +56,7 @@ public class Utilizador {
     public synchronized boolean autenticar(String pw){
     	boolean ret =false;
     	if(this.pw.equals(pw)){
-    		this.activ=true;
+    		//this.activ=true;
     		ret = true;
     	}
     	return ret;
