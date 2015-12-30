@@ -188,6 +188,7 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 					this.esperaPass.await();
 				} catch (InterruptedException e) {
 					System.out.println("Estrorei no await Condutro");
+					
 					e.printStackTrace();
 				}
 			}
