@@ -102,9 +102,7 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 		out.println("A ver se existem condutoes dusponiveis");
 		while(ret==false && ui.hasNext()){
 			 u = ui.next();
-			 out.println("Ativo: " + u.isActiv());
-			 out.println("Condutor: " + u.isCondutor());
-			 out.println("ocupado: " + u.isOcupado());
+			 out.println(u.toString());
 			if(u.isActiv() && u.isCondutor() && !u.isOcupado()){
 				ret = true;
 				out.println("encotrei condutor disponivel");
@@ -145,16 +143,17 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 					}
 				}
 			}
-			out.println("ja escolhi o condutor, meter tudo coupado");
-			//ja estao coupados
-			condutor.setOcupado(true);
-			log.setOcupado(true);
+			
 			out.println("ja estamos ocupados, fazer acossiaçao");
 			//acossiar
 			log.setPar(condutor);
 			condutor.setPar(log);
 			out.println("ja estamos acossiados, vou avisar condutores para ver quem escolhi");
 			//estao acosiados
+			//ja estao coupados
+			out.println("ja escolhi o condutor, meter tudo coupado");
+			condutor.setOcupado(true);
+			log.setOcupado(true);
 			this.esperaPass.signalAll();
 			out.println("ja avisei");
 		}finally{

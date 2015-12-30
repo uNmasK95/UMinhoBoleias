@@ -23,7 +23,7 @@ public class ServerConnection implements Runnable{
     static final String SOLICITARVIAGEM ="SOLICITARVIAGEM";
     static final String DISPONIVELVIAGEM ="DISPONIVELVIAGEM";
     static final String LOGOUT ="LOGOUT";
-	static int sleepFactor = 1000;
+	static int sleepFactor = 10000;
     private Socket sock;
     private UMinhoBoleias umb;
     private BufferedWriter out;
@@ -148,13 +148,14 @@ public class ServerConnection implements Runnable{
 		String modelo = arr[3];
 		double custoUnitario = Double.parseDouble(arr[4]);
 		int sleep;
-		
+		//login
+		login.login(login.getPw(), true, new Veiculo(modelo, matricula), l, in, out, null); 
 		//muda custo de viagem pro que recebi
 		login.setCustoUnitario(custoUnitario);
 		String aux = umb.disponivelViagem(cliente.getEmail(), l, matricula, modelo, custoUnitario);
-		
+		String[] arraux = aux.split(":");
 		//ve se a string tem 4 elementos, ou seja tem tempo de viagem
-		if(aux.length()==4){
+		if(arraux.length==4){
 			sleep = Integer.parseInt(arr[3]);			
 		}else{
 			sleep = 0;
@@ -175,8 +176,21 @@ public class ServerConnection implements Runnable{
 		out.write("OK");
 		out.newLine();
 		out.flush();
-		login.logout();
 		
+		//sleep da viagem
+		int distanciaSleep = (new Local(arraux[1])).distancia(new Local(arraux[2]));
+		
+		try{
+			Thread.sleep(distanciaSleep*sleepFactor);
+		}catch(InterruptedException e){
+			e.printStackTrace();
+		}
+		
+		//envia o custo da viagem ao cliente
+		out.write("OK");
+		out.newLine();
+		out.flush();
+		login.logout();		
 	}
 	
 	private void logout(){
