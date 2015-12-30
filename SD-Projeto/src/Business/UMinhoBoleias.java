@@ -207,5 +207,16 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 		}
 		return ret;
 	}
+
+	@Override
+	public void logout(String username) {
+		try{
+			this.lockUsers.lock();
+			this.utilizadores.get(username).exit();
+		}finally{
+			this.lockUsers.unlock();
+		}
+		
+	}
     
 }

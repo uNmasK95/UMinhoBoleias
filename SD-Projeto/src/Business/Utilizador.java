@@ -49,13 +49,23 @@ public class Utilizador {
         this.v= null;
         this.loc = null;
         this.dest= null;
+        this.par=null;;
+        this.ocupado=false;
+        this.autent=true;
+    }
+    
+    public synchronized void exit(){
+        this.condutor=false;
+        this.activ=false;
+        this.v= null;
+        this.loc = null;
+        this.dest= null;
         this.par=null;
         this.in=null;
         this.out=null;
         this.ocupado=false;
         this.autent=false;
     }
-    
     public synchronized boolean autenticar(String pw){
     	boolean ret =false;
     	if(this.pw.equals(pw)){
