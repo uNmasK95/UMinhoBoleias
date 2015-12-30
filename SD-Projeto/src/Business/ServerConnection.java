@@ -128,7 +128,7 @@ public class ServerConnection implements Runnable{
 		}
 		
 		//envia o custo da viagem ao cliente
-		out.write(String.valueOf((login.getPar().getCustoUnitario()*partida.distancia(destino));
+		out.write(String.valueOf((login.getPar().getCustoUnitario()*partida.distancia(destino))));
 		out.newLine();
 		out.flush();
 		login.logout();
@@ -151,7 +151,7 @@ public class ServerConnection implements Runnable{
 		int sleep;
 		
 		//muda custo de viagem pro que recebi
-		login.setCustoViagem(custoUnitario);
+		login.setCustoUnitario(custoUnitario);
 		String aux = umb.disponivelViagem(cliente.getEmail(), l, matricula, modelo, custoUnitario);
 		
 		//ve se a string tem 4 elementos, ou seja tem tempo de viagem
@@ -167,7 +167,7 @@ public class ServerConnection implements Runnable{
 	
 		//sleep da viagem
 		try{
-			Thread.sleep(sleep*60000);
+			Thread.sleep(sleep*sleepFactor);
 		}catch(InterruptedException e){
 			e.printStackTrace();
 		}
