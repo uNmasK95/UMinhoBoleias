@@ -9,16 +9,11 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import Aula7.Cliente;
-import Aula7.DinheiroIndisponivel;
 
 /**
  *
@@ -27,6 +22,7 @@ import Aula7.DinheiroIndisponivel;
 public class ClienteMain implements UMinhoBoleiasIface {
 
 	private String email;
+	private boolean condutor; 
 	private Socket sock;
 	private BufferedWriter out;
 	private BufferedReader in;
@@ -51,13 +47,28 @@ public class ClienteMain implements UMinhoBoleiasIface {
 		this.email = email;
 	}
 
-	private static String menuCliente() {
+	private static String menuInicio() {
 		StringBuilder ap = new StringBuilder();
-		ap.append("0-Fazer logout");
+		ap.append("=========Menu=========");
+		ap.append("0-Sair");
 		ap.append("1-Registar utilizador");
 		ap.append("2-Login Utilizador");
-		ap.append("3-Solicitar viagem");
-		ap.append("4-Disponibilizar boleia");
+		return ap.toString();
+	}
+	
+	private static String menuCondutor(){
+		StringBuilder ap = new StringBuilder();
+		ap.append("=========Menu Condutor=========");
+		ap.append("1-Disponibilizar boleia");
+		ap.append("Outro-Fazer logout");
+		return ap.toString();
+	}
+	
+	private static String menuCliente(){
+		StringBuilder ap = new StringBuilder();
+		ap.append("=========Menu Cliente=========");
+		ap.append("1-Disponibilizar boleia");
+		ap.append("Outro-Fazer logout");
 		return ap.toString();
 	}
 
@@ -93,21 +104,13 @@ public class ClienteMain implements UMinhoBoleiasIface {
 			if (l.equals(KO)) {
 				return false;
 			} else {
-
+				this.email = user;
 			}
 		} catch (IOException ex) {
 			return false;
 		}
 		return true;
 	}
-
-	/*
-	 * if(distancia==0){ ret = new
-	 * String(condutor.getEmail()+":"+v.getMatricula()+":"+v.getModelo());
-	 * }else{
-	 * condutor.getEmail()+":"+v.getMatricula()+":"+v.getModelo()+":"+(condutor.
-	 * getLoc().distancia(partida)/50));
-	 */
 
 	@Override
 	public String solicitarViagem(String user, Local partida, Local destino) {
@@ -118,7 +121,11 @@ public class ClienteMain implements UMinhoBoleiasIface {
 			out.write(user + ":" + partida.toString() + ":" + destino.toString());
 			out.newLine();
 			out.flush();
+			
+			
 			// foi enviado o pedido para o serverconnection
+			
+			System.out.println("A espera de um condutor para efetuar a sua viagem");
 			// vai ficar a espera de uma resposta por parte do servidor
 			linhaResposta = in.readLine(); // user:matricula:modelo:?tempo
 			String[] arr = linhaResposta.split(":");
@@ -136,9 +143,12 @@ public class ClienteMain implements UMinhoBoleiasIface {
 			// apos o serverconnection ter feito sleep do tempo de deslocacao do
 			// condutor ate ao local de partida
 			if (linhaResposta.equals(OK)) {
-				if (arr.length == 3) {
+				if (arr.length == 4) {
 					System.out.println("O Utilizador " + arr[0] + " com o carro de matricula " + arr[1] + " e modelo "
 							+ arr[2] + " já chegou ao local de partida");
+					System.out.println("Foi iniciada a viagem para o destino " + destino.toString());
+				}else{
+					System.out.println("Foi iniciada a viagem para o destino " + destino.toString());
 				}
 			}
 			// apos o serverconnection ter fetio o sleep do tempo de viagem
@@ -150,10 +160,10 @@ public class ClienteMain implements UMinhoBoleiasIface {
 		}
 		return "Viagem realizada com sucesso";
 	}
-
+	
 	@Override
 	public String disponivelViagem(String user, Local actual, String matricula, String modelo, double custoUnitario) {
-		String l;
+		String linhaResposta;
 		try {
 			out.write(DISPONIVELVIAGEM);
 			out.newLine();
@@ -161,24 +171,40 @@ public class ClienteMain implements UMinhoBoleiasIface {
 			out.newLine();
 			out.flush();
 
-			System.out.print("Tem uma viagem para realizar em " + in.readLine());
-			// espera
-			// para
-			// receber
-			// um
-			// localde partida de uma viagem
-			System.out.println(" com o destino " + in.readLine());
+			System.out.println("A espera de solicitações de viagens");
 
-			System.out.println("Prima 1 quando chegar ao destino");
-			input.nextInt();
+			linhaResposta = in.readLine();
+			String[] arr = linhaResposta.split(":");
+			
+			if (arr.length == 3) {
+				// tem uma viagem para comprir apartir do local de onte está
+				System.out.println("O Utilizador " + arr[0] + " encontra-se  no loca em que se encontra " + arr[1] + " a espera de boleia para o destino " + arr[2]);
+			} else {
+				// o condutor nao se encontra no local de partida
+				System.out.println("O Utilizador " + arr[0] + " encontra-se  no loca " + arr[1] + " a espera de boleia para o destino " + arr[2]);
+			}
 
-			out.write("" + custoUnitario);
-			out.newLine();
-			out.flush();
+			linhaResposta = in.readLine();
+
+			// apos o serverconnection ter feito sleep do tempo de deslocacao do
+			// condutor ate ao local de partida
+			if (linhaResposta.equals(OK)) {
+				if (arr.length == 4) {
+					System.out.println("Já se encontra no local de partida " + arr[1]);
+					System.out.println("Foi iniciada a viagem para o destino " + arr[2]);
+				}else{
+					System.out.println("Foi iniciada a viagem para o destino " + arr[2]);
+				}
+			}
+			
+			// apos o serverconnection ter fetio o sleep do tempo de viagem
+			// tem de receber o custo
+			linhaResposta = in.readLine();
+			System.out.println("Chegou ao destino");
 		} catch (IOException ex) {
-			return null;
+			return "Viagem nao realizada";
 		}
-		return null;
+		return "Viagem realizada com sucesso";			
 	}
 
 	private static Local lerLocal() {
@@ -190,66 +216,78 @@ public class ClienteMain implements UMinhoBoleiasIface {
 	}
 
 	public static void main(String[] args) {
-		Scanner input = new Scanner(System.in);
 		ClienteMain c1 = new ClienteMain("localhost", 6969);
 		int n;
-
-		System.out.println(menuCliente());
-		while ((n = input.nextInt()) != 0) {
-			System.out.println(menuCliente());
+		
+		System.out.println(menuInicio());
+		while ((n = input.nextInt()) != 0 && (c1.email)==null) {
+			System.out.println(menuInicio());
 			switch (n) {
-			case 1: {
-				System.out.println("=========Registar=========");
-				System.out.println("Email");
-				String email = input.nextLine();
-				System.out.println("Password");
-				String pass = input.nextLine();
-				c1.registaUtilizador(email, pass);
-				break;
-			}
-			case 2: {
-				System.out.println("=========LOGIN=========");
-				System.out.println("Email");
-				String email = input.nextLine();
-				System.out.println("Password");
-				String pass = input.nextLine();
-				c1.autenticar(email, pass);
-				break;
-			}
-			case 3: {
-				System.out.println("=========Solicitar Viagem=========");
-				if (c1.getEmail() != null) {
-					System.out.println("Local de Partida");
-					Local partida = lerLocal();
-					System.out.println("Local de Destino");
-					Local destino = lerLocal();
-					c1.solicitarViagem(c1.getEmail(), partida, destino);
-				} else {
-					System.out.println("Necessita de estar autenticado");
+				case 1: {
+					System.out.println("=========Registar=========");
+					System.out.println("Email");
+					String email = input.nextLine();
+					System.out.println("Password");
+					String pass = input.nextLine();
+					c1.registaUtilizador(email, pass);
+					break;
 				}
-				break;
-			}
-			case 4: {
-				System.out.println("=========Disponibilizar Viagem=========");
-				if (c1.getEmail() != null) {
-					System.out.println("Local de Atual");
-					Local atual = lerLocal();
-					System.out.println("Matricula : __-__-__");
-					String matricula = input.nextLine();
-					System.out.println("Modelo :");
-					String modelo = input.nextLine();
-					System.out.println("Custo da viagem :");
-					double custoUnitario = input.nextDouble();
-					c1.disponivelViagem(c1.getEmail(), atual, matricula, modelo, custoUnitario);
-				} else {
-					System.out.println("Necessita de estar autenticado");
+				case 2: {
+					System.out.println("=========LOGIN=========");
+					System.out.println("Email");
+					String email = input.nextLine();
+					System.out.println("Password");
+					String pass = input.nextLine();
+					c1.autenticar(email, pass);
+					System.out.println("1-Condutor outro-Cliente");
+					if((n = input.nextInt())==1){
+						c1.condutor = true;
+					}else{
+						c1.condutor = false;
+					}
+					break;
 				}
-				break;
+				default:
+					System.out.println("Insira um numero do menu");
 			}
-			default:
-				System.out.println("Insira um numero do menu");
+			if(c1.condutor){
+				System.out.println(menuCondutor());
+				if((n = input.nextInt()) == 1) {
+					System.out.println("=========Disponibilizar Viagem=========");
+					if (c1.getEmail() != null) {
+						System.out.println("Local de Atual");
+						Local atual = lerLocal();
+						System.out.println("Matricula : __-__-__");
+						String matricula = input.nextLine();
+						System.out.println("Modelo :");
+						String modelo = input.nextLine();
+						System.out.println("Custo da viagem :");
+						double custoUnitario = input.nextDouble();
+						c1.disponivelViagem(c1.getEmail(), atual, matricula, modelo, custoUnitario);
+					} else {
+						System.out.println("Necessita de estar autenticado");
+					}
+				}else{			
+						//fazer logout
+				}
+			}else{
+				//menu do cliente
+				System.out.println(menuCliente());
+				if((n = input.nextInt()) == 1) {
+					System.out.println("=========Solicitar Viagem=========");
+					if (c1.getEmail() != null) {
+						System.out.println("Local de Partida");
+						Local partida = lerLocal();
+						System.out.println("Local de Destino");
+						Local destino = lerLocal();
+						c1.solicitarViagem(c1.getEmail(), partida, destino);
+					} else {
+						System.out.println("Necessita de estar autenticado");
+					}
+				}else{
+					//fazer logout
+				}
 			}
 		}
 	}
-
 }
