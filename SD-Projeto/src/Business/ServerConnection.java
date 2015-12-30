@@ -23,7 +23,7 @@ public class ServerConnection implements Runnable{
     static final String SOLICITARVIAGEM ="SOLICITARVIAGEM";
     static final String DISPONIVELVIAGEM ="DISPONIVELVIAGEM";
     static final String LOGOUT ="LOGOUT";
-	static int sleepFactor = 10000;
+	static int sleepFactor = 1000;
     private Socket sock;
     private UMinhoBoleias umb;
     private BufferedWriter out;
@@ -78,7 +78,7 @@ public class ServerConnection implements Runnable{
 		String[] arr = info.split(":");
 		Local partida = new Local(arr[1]);
 		Local destino = new Local(arr[2]);
-		int sleep;
+		Double sleep;
 		Utilizador condutor;
 		
 		//login
@@ -89,10 +89,11 @@ public class ServerConnection implements Runnable{
 		
 		//condutor ja está lá
 		if(arr2.length==3){													
-			sleep = 0;
+			sleep = 0.0;
 		}else{
 			//condutor está a caminho e demora arr2[3]
-			sleep = Integer.parseInt(arr2[3]);						
+			System.out.println("SleeP_PASS:"  + arr2[3]);
+			sleep = Double.parseDouble(arr2[3]);						
 		}
 		
 		out.write(aux);
@@ -101,7 +102,7 @@ public class ServerConnection implements Runnable{
 		
 		//sleep * 60 * 1000 (min * milisegundos)
 		try {
-			Thread.sleep(sleep*sleepFactor);										
+			Thread.sleep(((int)(sleep*sleepFactor)) );										
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -160,12 +161,13 @@ public class ServerConnection implements Runnable{
 		}else{
 			sleep = 0;
 		}
-		
+		System.out.println("Mansi ao conrudo ante sleep:  " + aux);
 		out.write(aux);
 		out.newLine();
 		out.flush();
 	
-		//sleep da viagem
+		//sleep da ate ao passageiro
+		System.out.println("Sleep passageiro: " + sleep*sleepFactor);
 		try{
 			Thread.sleep(sleep*sleepFactor);
 		}catch(InterruptedException e){
@@ -179,7 +181,7 @@ public class ServerConnection implements Runnable{
 		
 		//sleep da viagem
 		int distanciaSleep = (new Local(arraux[1])).distancia(new Local(arraux[2]));
-		
+		System.out.println("Sleep viagem: " + distanciaSleep*sleepFactor);
 		try{
 			Thread.sleep(distanciaSleep*sleepFactor);
 		}catch(InterruptedException e){
@@ -200,6 +202,7 @@ public class ServerConnection implements Runnable{
 	}
     public void run() {
     	String op="a";
+    	boolean lout=false;
     	try{
     		while(sock.isConnected() && op !=null){
     			System.out.println("Espera de Ler");
@@ -220,6 +223,7 @@ public class ServerConnection implements Runnable{
     						break;
     					case LOGOUT:
     						logout();
+    						lout=true;
     						break;
     				}
     			}
@@ -227,6 +231,9 @@ public class ServerConnection implements Runnable{
     		//System.out.println("SAI");
     	}catch(IOException ex){
     		
+    	}
+    	if(!lout){
+    		logout();
     	}
     	System.out.println("SAI");
     }
