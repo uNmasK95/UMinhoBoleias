@@ -8,13 +8,13 @@ package Business;
  *
  * @author Octavio
  */
-public class Main {
-
-    private static Core c = new Core();
+public class ServerMain {
     
     public static void main(String[] args) throws Exception {
-        c.registarUser();
-        c.login();
+    	int port = 6969;
+    	Servidor s  = new  Servidor(port);
+    	System.out.println("Vou inicicar o servidor na porta " + port);
+    	s.startServer();
     }
     
 }
