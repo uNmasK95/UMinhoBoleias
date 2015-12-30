@@ -16,7 +16,7 @@ public class Servidor {
 		this.servidor = new ServerSocket(port);
 	}
 	
-	public void startServer(){
+	public void startServer() throws IOException{
 		while(true){
             Socket cliente = null;
             try {
