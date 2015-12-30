@@ -165,7 +165,7 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 		if(distancia==0){
 			ret =  new String(condutor.getEmail()+":"+v.getMatricula()+":"+v.getModelo());
 		}else{
-			ret =  new String(condutor.getEmail()+":"+v.getMatricula()+":"+v.getModelo()+":"+(condutor.getLoc().distancia(partida)/50.0));
+			ret =  new String(condutor.getEmail()+":"+v.getMatricula()+":"+v.getModelo()+":"+((condutor.getLoc().distancia(partida))/50.0));
 		}
 		return ret;
 	}
@@ -204,10 +204,12 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 		double distancia = log.getLoc().distancia(passageiro.getLoc());
 		
 		if (distancia!=0){
-			ret =  new String(passageiro.getEmail()+":"+passageiro.getLoc().toString()+":"+passageiro.getDest().toString()+":"+(distancia/50));
+			ret =  new String(passageiro.getEmail()+":"+passageiro.getLoc().toString()+":"+passageiro.getDest().toString()+":"+(distancia/50.0));
+			
 		}else{
 			ret =  new String(passageiro.getEmail()+":"+passageiro.getLoc().toString()+":"+passageiro.getDest().toString());
 		}
+		out.println("RET disponivel viagem boleias:" + ret);
 		return ret;
 	}
 
