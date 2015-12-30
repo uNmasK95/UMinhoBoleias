@@ -138,7 +138,9 @@ public class Utilizador {
 	public synchronized void setOcupado(boolean ocupado) {
 		if(this.ocupado==false){
 			this.ocupado = ocupado;
-			this.getPar().setOcupado(ocupado);
+			if(this.getPar()!=null){
+				this.getPar().setOcupado(ocupado);
+			}
 		}
 	}
 	
@@ -164,6 +166,13 @@ public class Utilizador {
 
 	public synchronized void setLoc(Local loc) {
 		this.loc = loc;
+	}
+
+	@Override
+	public String toString() {
+		return "Utilizador [email=" + email + ", pw=" + pw + ", condutor=" + condutor + ", activ=" + activ
+				+ ", ocupado=" + ocupado + ", v=" + v + ", loc=" + loc + ", dest=" + dest + ", custoUnitario="
+				+ custoUnitario + ", par=" + par + ", in=" + in + ", out=" + out + ", autent=" + autent + "]";
 	}
 
 	public synchronized Local getDest() {
