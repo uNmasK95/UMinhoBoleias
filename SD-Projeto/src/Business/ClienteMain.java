@@ -274,7 +274,7 @@ public class ClienteMain implements UMinhoBoleiasIface {
 				String pass = input.nextLine();
 				boolean ret = c1.autenticar(email, pass);
 				if(ret){
-					System.out.println("1-Condutor outro-Cliente");
+					System.out.println("1-Condutor \noutro-Cliente");
 					if ((n = lerint()) == 1) {
 						c1.condutor = true;
 					} else {
@@ -298,7 +298,7 @@ public class ClienteMain implements UMinhoBoleiasIface {
 							String matricula = input.nextLine();
 							System.out.println("Modelo :");
 							String modelo = input.nextLine();
-							System.out.println("Custo da viagem :");
+							System.out.println("Custo da viagem (unitário):");
 							double custoUnitario = input.nextDouble();
 							c1.disponivelViagem(c1.getEmail(), atual, matricula, modelo, custoUnitario);
 						} else {
