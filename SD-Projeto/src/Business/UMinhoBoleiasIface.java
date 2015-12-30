@@ -14,7 +14,8 @@ public interface UMinhoBoleiasIface {
     public static final String AUTENTICAR = "AUTENTICAR";
     public static final String SOLICITARVIAGEM = "SOLICITARVIAGEM";
     public static final String DISPONIVELVIAGEM ="DISPONIVELVIAGEM";
-
+    public static final String LOGOUT ="LOGOUT";
+    
     public static final String OK = "OK";
     public static final String KO = "KO";
 
