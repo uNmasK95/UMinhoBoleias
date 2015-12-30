@@ -92,7 +92,7 @@ public class ServerConnection implements Runnable{
 			sleep = 0;
 		}else{
 			//condutor está a caminho e demora arr2[3]
-			sleep = Integer.parseInt(arr2[3]);								
+			sleep = Integer.parseInt(arr2[3]);						
 		}
 		
 		out.write(aux);
@@ -111,10 +111,11 @@ public class ServerConnection implements Runnable{
 		out.flush();
 		
 		//informa o condutor que chegou ao local de partida do cliente
-		condutor = login.getPar();
+		/*condutor = login.getPar();
 		condutor.getOut().write("OK"); 
 		condutor.getOut().newLine();
 		condutor.getOut().flush();
+		*/
 		
 		//sleep da viagem
 		int sleepViagem = partida.distancia(destino);
@@ -126,14 +127,15 @@ public class ServerConnection implements Runnable{
 		}
 		
 		//envia o custo da viagem ao cliente
-		out.write(String.valueOf(condutor.getCustoViagem()));
+		out.write(String.valueOf(login.getPar().getCustoViagem()));
 		out.newLine();
 		out.flush();
 		
 		//envia que chegou ao destino ao condutor
-		condutor.getOut().write("OK"); 
+		/*condutor.getOut().write("OK"); 
 		condutor.getOut().newLine();
 		condutor.getOut().flush();
+		*/
 	}
 	
 	private void disponivel() throws IOException{
@@ -173,6 +175,8 @@ public class ServerConnection implements Runnable{
 		out.write("OK");
 		out.newLine();
 		out.flush();
+		
+		
 	}
 	
     public void run() {
