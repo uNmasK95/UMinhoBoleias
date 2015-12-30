@@ -41,7 +41,6 @@ public class ServerConnection implements Runnable{
 		String info = in.readLine();
 		String[] arr = info.split(":");
 		
-		
 		if(umb.registaUtilizador(arr[0], arr[1])){ 
 			//conseguiu
 			out.write("OK");
@@ -79,7 +78,6 @@ public class ServerConnection implements Runnable{
 		Local partida = new Local(arr[1]);
 		Local destino = new Local(arr[2]);
 		Double sleep;
-		Utilizador condutor;
 		
 		//login
 		login.login(login.getPw(), false, null, partida, in, out, destino); 
@@ -92,7 +90,6 @@ public class ServerConnection implements Runnable{
 			sleep = 0.0;
 		}else{
 			//condutor está a caminho e demora arr2[3]
-			System.out.println("SleeP_PASS:"  + arr2[3]);
 			sleep = Double.parseDouble(arr2[3]);						
 		}
 		
@@ -101,7 +98,6 @@ public class ServerConnection implements Runnable{
 		out.flush();
 		
 		//sleep * 60 * 1000 (min * milisegundos)
-		System.out.println("SleeSolicita_Real ESPERA:"+((int)(sleep*sleepFactor)));
 		try {
 			Thread.sleep(((int)(sleep*sleepFactor)) );										
 		} catch (InterruptedException e) {
@@ -122,7 +118,6 @@ public class ServerConnection implements Runnable{
 		//sleep da viagem
 		Double sleepViagem = partida.distancia(destino)/50.0;
 		
-		System.out.println("SleeSolicita_Real Viagem:"+((int)(sleepViagem*sleepFactor)));
 		try{
 			Thread.sleep((int)(sleepViagem*sleepFactor));
 		}catch(InterruptedException e){
@@ -144,7 +139,6 @@ public class ServerConnection implements Runnable{
 	private void disponivel() throws IOException{
 		String info = in.readLine();
 		String[] arr = info.split(":");
-		System.out.println("info Recebido: " + info);
 		Utilizador cliente = umb.getUser(arr[0]);
 		Local l = new Local(arr[1]);
 		String matricula = arr[2];
@@ -157,21 +151,17 @@ public class ServerConnection implements Runnable{
 		login.setCustoUnitario(custoUnitario);
 		String aux = umb.disponivelViagem(cliente.getEmail(), l, matricula, modelo, custoUnitario);
 		String[] arraux = aux.split(":");
-		System.out.println("Aux do disponivel: "+ aux);
 		//ve se a string tem 4 elementos, ou seja tem tempo de viagem
 		if(arraux.length==4){
 			sleep = Double.parseDouble(arraux[3]);			
 		}else{
-			System.out.println("Entei no sleep 0");
 			sleep = 0.0;
 		}
-		System.out.println("Mansi ao conrudo ante sleep:  " + aux);
 		out.write(aux);
 		out.newLine();
 		out.flush();
 	
 		//sleep da ate ao passageiro
-		System.out.println("SleeCondutor_Real ESPERA:"+((int)(sleep*sleepFactor)));
 		try{
 			Thread.sleep((int)(sleep*sleepFactor));
 		}catch(InterruptedException e){
@@ -185,7 +175,6 @@ public class ServerConnection implements Runnable{
 		
 		//sleep da viagem
 		double distanciaSleep = (new Local(arraux[1])).distancia(new Local(arraux[2]))/50.0;
-		System.out.println("SleeCondutor_Real Viagem:"+(int)(distanciaSleep*sleepFactor));
 		try{
 			Thread.sleep((int)(distanciaSleep*sleepFactor));
 		}catch(InterruptedException e){
@@ -209,7 +198,6 @@ public class ServerConnection implements Runnable{
     	boolean lout=false;
     	try{
     		while(sock.isConnected() && op !=null){
-    			System.out.println("Espera de Ler");
     			op = in.readLine();
     			if(op!=null){
     				switch(op){
@@ -232,17 +220,13 @@ public class ServerConnection implements Runnable{
     				}
     			}
     		}
-    		//System.out.println("SAI");
     	}catch(IOException ex){
     		
-    	}
-    	if(!lout){
-    		logout();
-    	}
-    	if(!lout){
-    		logout();
-    	}
-    	System.out.println("SAI");
+    	}finally {
+    		if(!lout){
+    			logout();
+    		}
+		}
     }
     
 }

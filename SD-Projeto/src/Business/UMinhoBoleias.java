@@ -39,7 +39,7 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 			this.lockUsers.lock();
 			if(!utilizadores.containsKey(mail)){
 				utilizadores.put(mail, new Utilizador(mail, pass));
-		        out.println("Registado com sucesso!\n");
+		        out.println("Registado com sucesso!");
 		        ret= true;
 			}else{
 				out.println("Já existe um utilizador com esse nome");
@@ -99,7 +99,7 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 		boolean ret = false;
 		Utilizador u = null;
 		Iterator<Utilizador> ui  = utilizadores.values().iterator();
-		out.println("A ver se existem condutoes dusponiveis");
+		out.println("A ver se existem condutoes disponiveis");
 		while(ret==false && ui.hasNext()){
 			 u = ui.next();
 			 out.println(u.toString());
@@ -129,7 +129,6 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 					this.esperaCond.await();
 					out.println("existe condutor vou ver se ninguem escolheu");
 				} catch (InterruptedException e) {
-					System.out.println("Estrorei no await");
 					e.printStackTrace();
 				}
 			}
@@ -144,16 +143,16 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 				}
 			}
 			
-			out.println("ja estamos ocupados, fazer acossiaçao");
+			out.println("Vou fazer acossiaçao");
 			//acossiar
 			log.setPar(condutor);
 			condutor.setPar(log);
-			out.println("ja estamos acossiados, vou avisar condutores para ver quem escolhi");
 			//estao acosiados
-			//ja estao coupados
 			out.println("ja escolhi o condutor, meter tudo coupado");
 			condutor.setOcupado(true);
 			log.setOcupado(true);
+			//ja estao coupados
+			out.println("ja estamos acossiados, vou avisar condutores para ver quem escolhi");
 			this.esperaPass.signalAll();
 			out.println("ja avisei");
 		}finally{
@@ -190,8 +189,6 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 					out.println("Vou espera que algeum me escolha");
 					this.esperaPass.await();
 				} catch (InterruptedException e) {
-					System.out.println("Estrorei no await Condutro");
-					
 					e.printStackTrace();
 				}
 			}
@@ -209,7 +206,6 @@ public class UMinhoBoleias implements UMinhoBoleiasIface {
 		}else{
 			ret =  new String(passageiro.getEmail()+":"+passageiro.getLoc().toString()+":"+passageiro.getDest().toString());
 		}
-		out.println("RET disponivel viagem boleias:" + ret);
 		return ret;
 	}
 

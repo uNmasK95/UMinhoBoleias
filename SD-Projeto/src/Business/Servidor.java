@@ -7,11 +7,9 @@ import java.net.Socket;
 public class Servidor {
     
 	private ServerSocket servidor;
-	private int port;
 	private UMinhoBoleias boleias;
 	
 	public Servidor(int port) throws IOException {
-		this.port = port;
 		this.boleias = new UMinhoBoleias();
 		this.servidor = new ServerSocket(port);
 	}

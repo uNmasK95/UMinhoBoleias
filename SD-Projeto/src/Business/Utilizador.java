@@ -1,7 +1,7 @@
 package Business;
 
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 
 /**
  * Classe Utilizador
