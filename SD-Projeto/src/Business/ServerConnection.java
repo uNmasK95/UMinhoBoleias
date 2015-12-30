@@ -67,12 +67,21 @@ public class ServerConnection implements Runnable{
 		}
     }
     
-	private void solicita(){
+	private void solicita() throws IOException{
+		String info = in.readLine();
+		String[] arr = info.split(":");
+		Local partida = new Local(arr[1]);
+		Local destino = new Local(arr[2]);
+		login.login(login.getPw(), false, null, partida, in, out, destino);
 		
+		out.write(umb.solicitarViagem(arr[0], partida, destino));
+		out.newLine();
+		out.flush();
 	}
 	
-	private void disponivel(){
-		
+	private void disponivel() throws IOException{
+		String info = in.readLine();
+		String[] arr = info.split(":");
 	}
 	
     @Override
@@ -84,12 +93,16 @@ public class ServerConnection implements Runnable{
     			switch(op){
     				case REGISTAUTILIZADOR:
     					regista();
+    					break;
     				case AUTENTICAR:
     					login();
+    					break;
     				case SOLICITARVIAGEM:
     					solicita();
+    					break;
     				case DISPONIVELVIAGEM:
     					disponivel();
+    					break;
     			}
     		}
     	}catch(IOException ex){
