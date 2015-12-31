@@ -12,8 +12,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -26,12 +24,11 @@ public class ClienteMain implements UMinhoBoleiasIface {
 	private Socket sock;
 	private BufferedWriter out;
 	private BufferedReader in;
-	private static int sleepFactor = 1000;
+	private static int sleepFactor = 10;
 
 	private static Scanner input = new Scanner(System.in);
 
 	public ClienteMain(String remotehost, int port) {
-
 		try {
 			sock = new Socket(remotehost, port);
 			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
@@ -114,8 +111,9 @@ public class ClienteMain implements UMinhoBoleiasIface {
 			} else {
 				// o condutor nao se encontra no local
 				System.out.println("O Utilizador " + arr[0] + " com o carro de matricula " + arr[1] + " e modelo "
-						+ arr[2] + " irá demorar " + (Double.parseDouble(arr[3]) * sleepFactor) + " minutos a apresentar-se no local de partida");
+						+ arr[2] + " irá demorar " + (Double.parseDouble(arr[3]) * sleepFactor) + " segundos a apresentar-se no local de partida");
 			}
+			
 			linhaResposta = in.readLine();
 
 			// apos o serverconnection ter feito sleep do tempo de deslocacao do
@@ -156,16 +154,16 @@ public class ClienteMain implements UMinhoBoleiasIface {
 
 			if (arr.length == 3) {
 				// tem uma viagem para comprir apartir do local de onte está
-				System.out.println("O Utilizador " + arr[0] + " encontra-se  no loca em que se encontra " + arr[1]
+				System.out.println("O Utilizador " + arr[0] + " encontra-se  no local em que se encontra " + arr[1]
 						+ " a espera de boleia para o destino " + arr[2]);
 			} else {
 				// o condutor nao se encontra no local de partida
-				System.out.println("O Utilizador " + arr[0] + " encontra-se  no loca " + arr[1]
+				System.out.println("O Utilizador " + arr[0] + " encontra-se  no local " + arr[1]
 						+ " a espera de boleia para o destino " + arr[2]);
 			}
 
 			linhaResposta = in.readLine();
-
+			
 			// apos o serverconnection ter feito sleep do tempo de deslocacao do
 			// condutor ate ao local de partida
 			if (linhaResposta.equals(OK)) {
@@ -289,7 +287,8 @@ public class ClienteMain implements UMinhoBoleiasIface {
 			default:
 				System.out.println("Insira um numero do menu");
 			}
-			if (c1.email != null) {
+			
+			while(c1.email != null) {
 				if (c1.condutor) {
 					System.out.println(menuCondutor());
 					if ((n = lerint()) == 1) {
